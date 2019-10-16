@@ -1,6 +1,6 @@
 export class Block {
   public color: string = 'New Color';
-  public totalRows: number;
+  public totalRows: number = 0;
   public currentRows: number = 0;
   public active: boolean = true;
 
