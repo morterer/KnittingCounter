@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule, MatButtonModule} from '@angular/material';
+import {LocalStorageModule} from 'angular-2-local-storage';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {MatInputModule, MatButtonModule} from '@angular/material';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    LocalStorageModule.forRoot({ prefix: 'counter', storageType: 'localStorage'})
   ],
   providers: [],
   bootstrap: [AppComponent]
