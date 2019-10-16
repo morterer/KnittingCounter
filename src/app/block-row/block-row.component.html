@@ -1,0 +1,12 @@
+<div>
+  <mat-form-field>
+    <input matInput placeholder="Color" [value]="block.color" [disabled]="!block.active">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Total Rows" [(ngModel)]="block.totalRows" type="number" [disabled]="!block.active">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Current Rows" [value]="block.currentRows" type="number" [disabled]="!block.active">
+  </mat-form-field>
+  <button mat-mini-fab color="primary" (click)="increment()">+</button>
+</div>
