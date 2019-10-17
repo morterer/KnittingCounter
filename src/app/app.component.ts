@@ -11,8 +11,6 @@ import {debounceTime} from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   private static readonly  KEY = 'progress';
-  title = 'counter';
-
   public orderForm: FormGroup;
 
   constructor(private fb: FormBuilder, private localStorageService: LocalStorageService) {}
@@ -32,7 +30,6 @@ export class AppComponent implements OnInit {
   }
 
   private onChanges(): void {
-    // TODO: Add debounce so each keystroke doesn't trigger a change
     this.orderForm.valueChanges.pipe(
       debounceTime(300)
     ).subscribe(val => {
@@ -40,12 +37,6 @@ export class AppComponent implements OnInit {
         const result = this.localStorageService.set(AppComponent.KEY, val.addresses);
         console.log('result', result);
       });
-
-    // this.orderForm.valueChanges.subscribe(val => {
-    //   console.log('Change', val);
-    //   const result = this.localStorageService.set(AppComponent.KEY, val.addresses);
-    //   console.log('result', result);
-    // });
   }
 
   private createForm(data: Block[]) {
@@ -55,12 +46,18 @@ export class AppComponent implements OnInit {
   }
 
   private createMemberGroup(block: Block): FormGroup {
-    return this.fb.group({
+    // create a form group from block
+    const group = this.fb.group({
       color: [block.color, [Validators.required]],
       totalRows: [block.totalRows,[Validators.required, Validators.min(1)]],
       currentRows: block.currentRows,
       active: block.active
     });
+    // if block.active is false, disable the form group
+    // if (!block.active) {
+    //   group.disable();
+    // }
+    return group;
   }
 
   public addNewAddress() {
@@ -69,7 +66,20 @@ export class AppComponent implements OnInit {
   }
 
   public increment(i: number): void {
+    const totalRows = this.orderForm.get(`addresses.${i}.totalRows`).value;
+    let currentRows = this.orderForm.get(`addresses.${i}.currentRows`).value;
     const currentRowsComponent = this.orderForm.get(`addresses.${i}.currentRows`) as FormControl;
-    currentRowsComponent.setValue(currentRowsComponent.value + 1);
+    // increment the number of currentRows
+    currentRows++;
+    // update the form control with the number of currentRows
+    currentRowsComponent.setValue(currentRows);
+
+    // if currentRows greater than or equal to totalRows, then the block is completed
+    if (currentRows >= totalRows) {
+      // set active to false and disable the form group for the row
+      this.orderForm.get(`addresses.${i}.active`).setValue(false);
+      // this.orderForm.get(`addresses.${i}`).disable();
+      this.addNewAddress();
+    }
   }
 }
