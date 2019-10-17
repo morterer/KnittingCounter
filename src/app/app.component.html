@@ -12,10 +12,10 @@
           <input matInput placeholder="Color" formControlName="color">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Total Rows" formControlName="totalRows">
+          <input matInput placeholder="Total Rows" formControlName="totalRows" type="number">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Current Rows" formControlName="currentRows">
+          <input matInput placeholder="Current Rows" formControlName="currentRows" type="number">
         </mat-form-field>
         <!-- if the block is not active, assume it's complete and don't show the + button -->
         <button *ngIf="a.get('active').value" mat-mini-fab type="button" color="primary" (click)="increment(i)">+</button>
