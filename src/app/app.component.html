@@ -18,7 +18,7 @@
           <input matInput placeholder="Current Rows" formControlName="currentRows" type="number">
         </mat-form-field>
         <!-- if the block is not active, assume it's complete and don't show the + button -->
-        <button *ngIf="a.get('active').value" mat-mini-fab type="button" color="primary" (click)="increment(i)">+</button>
+        <button *ngIf="a.get('active').value" mat-flat-button type="button" (click)="increment(i)">+</button>
       </div>
 
   </div>
