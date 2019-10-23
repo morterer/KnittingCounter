@@ -11,7 +11,9 @@ import {debounceTime} from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   private static readonly  KEY = 'progress';
-  public orderForm: FormGroup;
+  // TODO: Find a way to expose this to the template
+  public static readonly BLOCKS = 'blocks';
+  public blocksFormGroup: FormGroup;
 
   constructor(private fb: FormBuilder, private localStorageService: LocalStorageService) {}
 
@@ -30,18 +32,18 @@ export class AppComponent implements OnInit {
   }
 
   private onChanges(): void {
-    this.orderForm.valueChanges.pipe(
+    this.blocksFormGroup.valueChanges.pipe(
       debounceTime(300)
     ).subscribe(val => {
         console.log('Change', val);
-        const result = this.localStorageService.set(AppComponent.KEY, val.addresses);
+        const result = this.localStorageService.set(AppComponent.KEY, val.blocks);
         console.log('result', result);
       });
   }
 
   private createForm(data: Block[]) {
-    this.orderForm = this.fb.group({
-        addresses: this.fb.array(data.map(elem => this.createMemberGroup(elem)))
+    this.blocksFormGroup = this.fb.group({
+        blocks: this.fb.array(data.map(elem => this.createMemberGroup(elem)))
     });
   }
 
@@ -53,22 +55,18 @@ export class AppComponent implements OnInit {
       currentRows: block.currentRows,
       active: block.active
     });
-    // if block.active is false, disable the form group
-    // if (!block.active) {
-    //   group.disable();
-    // }
     return group;
   }
 
   public addNewAddress() {
-    const fa = this.orderForm.get('addresses') as FormArray;
+    const fa = this.blocksFormGroup.get(AppComponent.BLOCKS) as FormArray;
     fa.push(this.createMemberGroup(new Block()));
   }
 
   public increment(i: number): void {
-    const totalRows = this.orderForm.get(`addresses.${i}.totalRows`).value;
-    let currentRows = this.orderForm.get(`addresses.${i}.currentRows`).value;
-    const currentRowsComponent = this.orderForm.get(`addresses.${i}.currentRows`) as FormControl;
+    const totalRows = this.blocksFormGroup.get(`${AppComponent.BLOCKS}.${i}.totalRows`).value;
+    let currentRows = this.blocksFormGroup.get(`${AppComponent.BLOCKS}.${i}.currentRows`).value;
+    const currentRowsComponent = this.blocksFormGroup.get(`${AppComponent.BLOCKS}.${i}.currentRows`) as FormControl;
     // increment the number of currentRows
     currentRows++;
     // update the form control with the number of currentRows
@@ -77,8 +75,8 @@ export class AppComponent implements OnInit {
     // if currentRows greater than or equal to totalRows, then the block is completed
     if (currentRows >= totalRows) {
       // set active to false and disable the form group for the row
-      this.orderForm.get(`addresses.${i}.active`).setValue(false);
-      // this.orderForm.get(`addresses.${i}`).disable();
+      this.blocksFormGroup.get(`${AppComponent.BLOCKS}.${i}.active`).setValue(false);
+      // this.orderForm.get(`${AppComponent.BLOCKS}.${i}`).disable();
       this.addNewAddress();
     }
   }

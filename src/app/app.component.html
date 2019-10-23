@@ -5,9 +5,9 @@
   </h1>
 </div>
 
-<form [formGroup]="orderForm" novalidate>
-    <div formArrayName="addresses">
-      <div *ngFor="let a of orderForm.get('addresses').controls; let i=index" [formGroupName]="i">
+<form [formGroup]="blocksFormGroup" novalidate>
+    <div formArrayName="blocks">
+      <div *ngFor="let a of blocksFormGroup.get('blocks').controls; let i=index" [formGroupName]="i">
         <mat-form-field>
           <input matInput placeholder="Color" formControlName="color">
         </mat-form-field>
@@ -15,16 +15,15 @@
           <input matInput placeholder="Total Rows" formControlName="totalRows" type="number">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Current Rows" formControlName="currentRows" type="number">
+          <input matInput placeholder="Current Rows" formControlName="currentRows" type="number" readonly>
         </mat-form-field>
         <!-- if the block is not active, assume it's complete and don't show the + button -->
         <button *ngIf="a.get('active').value" mat-flat-button type="button" (click)="increment(i)">+</button>
       </div>
-
   </div>
 
   <div class="top-pad">
     <button mat-raised-button type="button" (click)="addNewAddress()">New Block</button>
   </div>
 </form>
-<pre>{{orderForm.value | json}}</pre>
+<pre>{{blocksFormGroup.value | json}}</pre>
