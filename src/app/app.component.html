@@ -7,7 +7,7 @@
 
 <form [formGroup]="blocksFormGroup" novalidate>
     <div formArrayName="blocks">
-      <div *ngFor="let a of blocksFormGroup.get('blocks').controls; let i=index" [formGroupName]="i">
+      <div *ngFor="let a of getFormGroup().controls; let i=index" [formGroupName]="i">
         <mat-form-field>
           <input matInput placeholder="Color" formControlName="color">
         </mat-form-field>

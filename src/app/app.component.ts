@@ -80,4 +80,8 @@ export class AppComponent implements OnInit {
       this.addNewAddress();
     }
   }
+
+  public getFormGroup(): FormGroup {
+    return this.blocksFormGroup.get(AppComponent.BLOCKS) as FormGroup;
+  }
 }
